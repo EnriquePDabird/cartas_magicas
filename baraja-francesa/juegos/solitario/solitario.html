@@ -6,19 +6,19 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Solitario - Baraja Francesa</title>
     <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;600;800&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="../css/styles.css">
-    <link rel="stylesheet" href="../css/dropdown.css">
-    <link rel="stylesheet" href="../css/solitario.css">
+    <link rel="stylesheet" href="../../core/css/styles.css">
+    <link rel="stylesheet" href="../../core/css/dropdown.css">
+    <link rel="stylesheet" href="solitario.css">
 </head>
 
 <body>
     <!-- Barra de Navegación de Juegos -->
     <nav class="top-nav">
         <ul class="nav-links">
-            <li><a href="../index.html" class="nav-brand">🏆 Menú Principal</a></li>
-            <li><a href="baraja.html">Baraja Ordenada</a></li>
-            <li><a href="solitario.html" class="active">Solitario Klondike</a></li>
-            <li><a href="poker.html">Poker Caribeño</a></li>
+            <li><a href="../../index.html" class="nav-brand">🏆 Menú Principal</a></li>
+            <li><a href="../baraja/baraja.html">Baraja Ordenada</a></li>
+            <li><a href="../solitario/solitario.html" class="active">Solitario Klondike</a></li>
+            <li><a href="../poker/poker.html">Poker Caribeño</a></li>
         </ul>
         <div class="user-auth-menu">
             <span id="user-display" class="user-email" style="display: none;"></span>
@@ -114,8 +114,9 @@
     </div>
 
     <!-- Script de Autenticación, declarado como module -->
-    <script type="module" src="../js/auth.js"></script>
-    <script src="../js/solitario.js"></script>
+    <script type="module" src="../../core/js/auth.js"></script>
+    <script src="solitario.js"></script>
+    <script src="../../core/js/audio.js"></script>
 </body>
 
 </html>

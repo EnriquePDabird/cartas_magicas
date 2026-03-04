@@ -7,8 +7,8 @@
     <title>El Mundo de las Cartas</title>
     <!-- Modern typography -->
     <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;600;800&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="css/styles.css">
-    <link rel="stylesheet" href="css/dropdown.css">
+    <link rel="stylesheet" href="core/css/styles.css">
+    <link rel="stylesheet" href="core/css/dropdown.css">
     <style>
         .welcome-container {
             max-width: 800px;
@@ -111,9 +111,9 @@
     <nav class="top-nav">
         <ul class="nav-links">
             <li><a href="index.html" class="nav-brand active">🏆 Menú Principal</a></li>
-            <li><a href="pages/baraja.html">Baraja Ordenada</a></li>
-            <li><a href="pages/solitario.html">Solitario Klondike</a></li>
-            <li><a href="pages/poker.html">Poker Caribeño</a></li>
+            <li><a href="juegos/baraja/baraja.html">Baraja Ordenada</a></li>
+            <li><a href="juegos/solitario/solitario.html">Solitario Klondike</a></li>
+            <li><a href="juegos/poker/poker.html">Poker Caribeño</a></li>
         </ul>
         <div class="user-auth-menu">
             <span id="user-display" class="user-email" style="display: none;"></span>
@@ -128,13 +128,13 @@
             desde cero con las tecnologías web más modernas. ¡Elige tu juego y diviértete!</p>
 
         <div class="games-grid">
-            <a href="pages/baraja.html" class="game-card">
+            <a href="juegos/baraja/baraja.html" class="game-card">
                 <span class="game-icon">🎴</span>
                 <h3 class="game-title">Visualizador</h3>
                 <p class="game-desc">Explora la baraja francesa completa en 3D interactivo.</p>
             </a>
 
-            <a href="pages/solitario.html" class="game-card">
+            <a href="juegos/solitario/solitario.html" class="game-card">
                 <span class="game-icon">♠️</span>
                 <h3 class="game-title">Solitario Klondike</h3>
                 <p class="game-desc">El clásico juego de paciencia con reglas oficiales.</p>
@@ -147,7 +147,7 @@
                 <p class="game-desc">Consigue 21 y vence a la banca.</p>
             </div>
 
-            <a href="pages/poker.html" class="game-card">
+            <a href="juegos/poker/poker.html" class="game-card">
                 <span class="game-icon">🎲</span>
                 <h3 class="game-title">Poker Caribeño</h3>
                 <p class="game-desc">Apuéstalo todo a tu mejor mano de póker.</p>
@@ -182,7 +182,8 @@
     </div>
 
     <!-- Script de Autenticación, declarado como module -->
-    <script type="module" src="js/auth.js"></script>
+    <script type="module" src="core/js/auth.js"></script>
+    <script src="core/js/audio.js"></script>
 </body>
 
 </html>

@@ -273,7 +273,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 }
             }
 
-            if (validMove) {
+            if (validMove && ctx.originZoneType !== 'foundation') {
                 updateScore(10);
                 showToast('+10 PUNTOS!');
             }
@@ -296,6 +296,12 @@ document.addEventListener('DOMContentLoaded', () => {
                 if (!topCard.isFlipped && diffColor && descendente) {
                     validMove = true;
                 }
+            }
+
+            // Penalización por devolver carta al Tableau desde Foundation
+            if (validMove && ctx.originZoneType === 'foundation') {
+                updateScore(-15);
+                showToast('-15 PUNTOS (Retiro de fundación)');
             }
         }
 
