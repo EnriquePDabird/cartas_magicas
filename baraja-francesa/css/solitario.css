@@ -1,0 +1,266 @@
+/* Estilos específicos para la vista del Solitario */
+
+.solitaire-container {
+    max-width: 1400px;
+    padding: 2rem;
+}
+
+.solitaire-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 3rem;
+    animation: fadeInDown 0.5s ease-out;
+}
+
+.back-btn {
+    text-decoration: none;
+    background: transparent;
+}
+
+.back-btn:hover {
+    background: rgba(255, 255, 255, 0.1);
+}
+
+.score-board {
+    background: rgba(0, 0, 0, 0.3);
+    padding: 0.5rem 2rem;
+    border-radius: 50px;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    box-shadow: inset 0 2px 10px rgba(0, 0, 0, 0.5);
+}
+
+.score-label {
+    font-size: 0.9rem;
+    color: var(--text-secondary);
+    letter-spacing: 2px;
+}
+
+.score-value {
+    font-size: 1.5rem;
+    font-weight: 800;
+    color: #ffd700;
+    text-shadow: 0 0 10px rgba(255, 215, 0, 0.3);
+}
+
+/* Tooltip de Información de Puntos */
+.score-info {
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-right: 0.5rem;
+    cursor: pointer;
+}
+
+.info-icon {
+    font-size: 1.2rem;
+    opacity: 0.6;
+    transition: opacity 0.2s;
+}
+
+.score-info:hover .info-icon {
+    opacity: 1;
+}
+
+.info-tooltip {
+    display: none;
+    position: absolute;
+    top: 150%;
+    left: 50%;
+    transform: translateX(-50%);
+    background: var(--card-bg);
+    color: var(--black-suit);
+    width: 250px;
+    padding: 1rem;
+    border-radius: 8px;
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.5);
+    z-index: 100;
+    animation: fadeInDown 0.2s;
+}
+
+.info-tooltip::before {
+    content: '';
+    position: absolute;
+    top: -8px;
+    left: 50%;
+    transform: translateX(-50%);
+    border-width: 0 8px 8px 8px;
+    border-style: solid;
+    border-color: transparent transparent var(--card-bg) transparent;
+}
+
+.info-tooltip h4 {
+    margin-bottom: 0.5rem;
+    font-size: 0.9rem;
+    text-transform: uppercase;
+    color: var(--accent);
+}
+
+.info-tooltip ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    font-size: 0.9rem;
+}
+
+.info-tooltip li {
+    margin-bottom: 0.25rem;
+    display: flex;
+    justify-content: space-between;
+}
+
+.info-tooltip strong {
+    color: var(--red-suit);
+}
+
+.info-tooltip li:first-child strong,
+.info-tooltip li:nth-child(2) strong {
+    color: #10b981;
+    /* Verde para positivo */
+}
+
+.score-info:hover .info-tooltip {
+    display: block;
+}
+
+/* Layout del Tablero */
+#solitaire-table {
+    display: flex;
+    flex-direction: column;
+    gap: 2rem;
+}
+
+.top-row {
+    display: flex;
+    justify-content: space-between;
+    padding: 0 1rem;
+}
+
+.stock-waste,
+.foundations {
+    display: flex;
+    gap: 1.5rem;
+}
+
+.tableau {
+    display: flex;
+    justify-content: space-between;
+    padding: 0 1rem;
+    min-height: 400px;
+}
+
+/* Slots para las cartas (huecos vacíos) */
+.card-slot {
+    width: 120px;
+    height: 168px;
+    border-radius: 12px;
+    border: 2px dashed rgba(255, 255, 255, 0.2);
+    position: relative;
+    box-shadow: inset 0 0 20px rgba(0, 0, 0, 0.5);
+    transition: background-color 0.2s;
+}
+
+.card-slot.drag-over {
+    background-color: rgba(255, 255, 255, 0.1);
+    border-color: rgba(255, 255, 255, 0.5);
+}
+
+/* Foundations hint symbols */
+.foundation-slot::after {
+    content: attr(data-suit);
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    font-size: 4rem;
+    opacity: 0.1;
+    pointer-events: none;
+    z-index: 0;
+}
+
+/* Ocultar el símbolo cuando la fundación tiene una carta */
+.foundation-slot:has(.card)::after {
+    display: none;
+}
+
+.pattern-hearts::after {
+    content: '♥';
+    color: var(--red-suit);
+    opacity: 0.2;
+}
+
+.pattern-diamonds::after {
+    content: '♦';
+    color: var(--red-suit);
+    opacity: 0.2;
+}
+
+.pattern-clubs::after {
+    content: '♣';
+    color: var(--black-suit);
+    opacity: 0.3;
+}
+
+.pattern-spades::after {
+    content: '♠';
+    color: var(--black-suit);
+    opacity: 0.3;
+}
+
+/* Ajustes para las cartas dentro del solitario */
+.card {
+    position: absolute;
+    /* Importante para apilarlas */
+    top: 0;
+    left: 0;
+    margin: 0;
+    animation: none;
+    /* Quitamos la animación de aparición global para controlarla por JS */
+    z-index: 10;
+    /* Aseguramos que la carta queda por encima del fondo del slot */
+}
+
+/* Apilamiento en el Tableau (cascada hacia abajo) */
+.tableau-slot .card {
+    position: absolute;
+    /* El top se calculará dinámicamente vía JS basado en su índice en la pila */
+}
+
+/* Las cartas boca abajo no deben mostrar eventos cursor:grab ni efectos de hover si no son jugables */
+.card.flipped {
+    cursor: default;
+}
+
+.card.flipped:hover {
+    transform: none;
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.15);
+    /* Sombra base */
+    z-index: auto;
+    /* Mantener su orden normal */
+}
+
+/* Toasts de notificación */
+.toast {
+    position: fixed;
+    bottom: 2rem;
+    left: 50%;
+    transform: translateX(-50%) translateY(100px);
+    background: #10b981;
+    color: white;
+    padding: 1rem 2rem;
+    border-radius: 8px;
+    font-weight: 600;
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.3);
+    opacity: 0;
+    transition: all 0.3s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+    z-index: 1000;
+}
+
+.toast.show {
+    transform: translateX(-50%) translateY(0);
+    opacity: 1;
+}

@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Poker Caribeño - El Mundo de las Cartas</title>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;600;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="../css/styles.css">
+    <link rel="stylesheet" href="../css/dropdown.css">
+    <link rel="stylesheet" href="../css/poker.css">
+</head>
+
+<body>
+    <!-- Barra de Navegación -->
+    <nav class="top-nav">
+        <ul class="nav-links">
+            <li><a href="../index.html" class="nav-brand">🏆 Menú Principal</a></li>
+            <li><a href="baraja.html">Baraja Ordenada</a></li>
+            <li><a href="solitario.html">Solitario Klondike</a></li>
+            <li><a href="poker.html" class="active">Poker Caribeño</a></li>
+        </ul>
+        <div class="user-auth-menu">
+            <span id="user-display" class="user-email" style="display: none;"></span>
+            <button id="btn-login-modal" class="btn btn-sm btn-primary">Iniciar Sesión</button>
+            <button id="btn-logout" class="btn btn-sm btn-danger" style="display: none;">Salir</button>
+        </div>
+    </nav>
+
+    <div class="poker-container">
+        <header class="poker-header">
+            <div class="header-left">
+                <h2>Poker Caribeño</h2>
+                <div class="score-info poker-rules">
+                    <span class="info-icon">ℹ️</span>
+                    <div class="info-tooltip">
+                        <h4>Reglas Básicas</h4>
+                        <ul>
+                            <li><strong>Ante:</strong> Apuesta inicial obligatoria.</li>
+                            <li><strong>Repartir:</strong> Recibes 5 cartas. La banca muestra 1.</li>
+                            <li><strong>Fold:</strong> Te retiras y pierdes el Ante.</li>
+                            <li><strong>Call:</strong> Apuestas el doble del Ante para ir.</li>
+                            <li><strong>Cualificación:</strong> La banca necesita mínimo un As y un Rey. Si no
+                                cualifica, ganas el Ante (1:1) y empatas el Call.</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            <div class="chips-board">
+                <span class="chips-icon">🪙</span>
+                <span id="chips-amount" class="chips-amount">1000</span>
+            </div>
+            <button id="btn-reset-chips" class="btn">Recargar Fichas</button>
+        </header>
+
+        <div class="poker-layout">
+            <main class="poker-table">
+                <!-- Mano del Crupier -->
+                <div class="hand-area">
+                    <div class="hand-title">Banca</div>
+                    <div id="dealer-cards" class="cards-container"></div>
+                    <div id="dealer-rank" class="hand-rank"></div>
+                </div>
+
+                <div class="table-center-logo">
+                    <span style="color: rgba(0,0,0,0.3)">♠️</span> Poker Caribeño <span
+                        style="color: rgba(255,0,0,0.3)">♥️</span>
+                </div>
+
+                <!-- Mano del Jugador -->
+                <div class="hand-area">
+                    <div class="hand-title">Tu Mano</div>
+                    <div id="player-cards" class="cards-container"></div>
+                    <div id="player-rank" class="hand-rank"></div>
+                </div>
+            </main>
+
+            <aside class="poker-sidebar">
+                <div id="game-message" class="sidebar-panel results-panel game-message show">
+                    <div id="msg-title">Esperando</div>
+                    <div id="msg-desc">Haz tu apuesta Ante para comenzar la mano.</div>
+                    <button id="btn-next" class="btn btn-primary btn-sm"
+                        style="display: none; margin-top: 1rem; width: 100%;">Siguiente Mano</button>
+                </div>
+
+                <div class="sidebar-panel betting-area">
+                    <div class="bets-info">
+                        <div class="bet-box">
+                            <span class="bet-label">ANTE</span>
+                            <span id="ante-amount" class="bet-amount">0</span>
+                        </div>
+                        <div class="bet-box">
+                            <span class="bet-label">CALL</span>
+                            <span id="call-amount" class="bet-amount">0</span>
+                        </div>
+                    </div>
+
+                    <div class="game-controls small-controls">
+                        <button id="btn-ante" class="btn btn-primary btn-sm">Ante (10)</button>
+                        <button id="btn-deal" class="btn btn-success btn-sm" disabled>Repartir</button>
+                        <button id="btn-fold" class="btn btn-danger btn-sm" disabled>Fold</button>
+                        <button id="btn-call" class="btn btn-primary btn-sm" disabled>Call (x2)</button>
+                    </div>
+                </div>
+            </aside>
+        </div>
+    </div>
+
+    <!-- Modal de Autenticación -->
+    <div id="auth-modal" class="modal-overlay" style="display: none;">
+        <div class="modal-content">
+            <button id="btn-close-modal" class="close-btn">&times;</button>
+            <h2 id="auth-title">Iniciar Sesión</h2>
+
+            <form id="auth-form" class="auth-form">
+                <div class="input-group">
+                    <label for="auth-email">Correo Electrónico</label>
+                    <input type="email" id="auth-email" required placeholder="tu@email.com">
+                </div>
+                <div class="input-group">
+                    <label for="auth-password">Contraseña</label>
+                    <input type="password" id="auth-password" required placeholder="••••••••">
+                </div>
+                <div id="auth-error" class="auth-error-msg"></div>
+                <button type="submit" id="btn-submit-auth" class="btn btn-primary w-100">Entrar</button>
+            </form>
+
+            <div class="auth-toggle">
+                <span id="auth-toggle-text">¿No tienes cuenta?</span>
+                <button id="btn-toggle-auth" class="btn-text">Regístrate</button>
+            </div>
+        </div>
+    </div>
+
+    <script type="module" src="../js/auth.js"></script>
+    <script src="../js/poker.js"></script>
+</body>
+
+</html>

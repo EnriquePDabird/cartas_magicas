@@ -1,0 +1,341 @@
+/* Estilos para el Poker Caribeño */
+
+.poker-container {
+    max-width: 1300px;
+    margin: 0 auto;
+    padding: 1rem;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    min-height: calc(100vh - 80px);
+}
+
+.poker-header {
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1rem;
+    padding: 0.8rem 1.5rem;
+    background: rgba(0, 0, 0, 0.2);
+    border-radius: 12px;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.header-left {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+}
+
+/* Tooltip de Información (Replicado de Solitario) */
+.score-info {
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+}
+
+.info-icon {
+    font-size: 1.2rem;
+    opacity: 0.6;
+    transition: opacity 0.2s;
+}
+
+.score-info:hover .info-icon {
+    opacity: 1;
+}
+
+.info-tooltip {
+    display: none;
+    position: absolute;
+    top: 150%;
+    left: 80%;
+    transform: translateX(-50%);
+    background: var(--card-bg);
+    color: var(--black-suit);
+    width: 400px;
+    padding: 1rem;
+    border-radius: 8px;
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.5);
+    z-index: 1000;
+    animation: fadeInDown 0.2s;
+    text-align: left;
+}
+
+.info-tooltip::before {
+    content: '';
+    position: absolute;
+    top: -8px;
+    left: 20%;
+    border-width: 0 8px 8px 8px;
+    border-style: solid;
+    border-color: transparent transparent var(--card-bg) transparent;
+}
+
+.info-tooltip h4 {
+    margin-bottom: 0.5rem;
+    font-size: 1rem;
+    text-transform: uppercase;
+    color: var(--accent);
+}
+
+.info-tooltip ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    font-size: 0.9rem;
+}
+
+.info-tooltip li {
+    margin-bottom: 0.5rem;
+}
+
+.info-tooltip strong {
+    color: var(--red-suit);
+}
+
+.score-info:hover .info-tooltip {
+    display: block;
+}
+
+.chips-board {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    font-size: 1.5rem;
+    font-weight: 800;
+}
+
+.chips-icon {
+    font-size: 2rem;
+}
+
+.chips-amount {
+    color: #ffd700;
+    text-shadow: 0 0 10px rgba(255, 215, 0, 0.4);
+}
+
+.poker-layout {
+    display: flex;
+    gap: 1rem;
+    width: 100%;
+    align-items: stretch;
+}
+
+.poker-table {
+    flex-grow: 1;
+    background: radial-gradient(ellipse at center, #0f5132 0%, #064e3b 100%);
+    border-radius: 120px;
+    border: 10px solid #451a03;
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.5), inset 0 0 50px rgba(0, 0, 0, 0.5);
+    padding: 2rem;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    align-items: center;
+    position: relative;
+    height: 480px;
+}
+
+.table-center-logo {
+    color: rgba(255, 255, 255, 0.08);
+    font-size: 1.8rem;
+    font-weight: 800;
+    text-transform: uppercase;
+    letter-spacing: 5px;
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    pointer-events: none;
+}
+
+.hand-area {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 1rem;
+    width: 100%;
+}
+
+.hand-title {
+    color: rgba(255, 255, 255, 0.6);
+    font-size: 1.2rem;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+}
+
+.hand-rank {
+    font-size: 1rem;
+    color: #ffd700;
+    margin-top: 0.5rem;
+    min-height: 1.5rem;
+}
+
+.cards-container {
+    display: flex;
+    gap: 0.2rem;
+    min-height: 110px;
+    height: 110px;
+}
+
+/* Sidebar y Paneles Derecha */
+.poker-sidebar {
+    width: 260px;
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    flex-shrink: 0;
+}
+
+.sidebar-panel {
+    background: rgba(0, 0, 0, 0.4);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 16px;
+    padding: 1rem;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 100%;
+}
+
+.results-panel {
+    border-color: rgba(255, 215, 0, 0.3);
+    text-align: center;
+    height: 160px;
+    justify-content: center;
+}
+
+.game-message {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.5rem;
+    width: 100%;
+}
+
+.game-message.show {
+    animation: zoomIn 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+#msg-title {
+    font-size: 1.2rem;
+    font-weight: 800;
+    color: #ffd700;
+}
+
+#msg-desc {
+    font-size: 0.85rem;
+    color: #cbd5e1;
+    line-height: 1.3;
+}
+
+.betting-area {
+    gap: 1rem;
+}
+
+.bets-info {
+    display: flex;
+    gap: 2rem;
+    width: 100%;
+    justify-content: center;
+}
+
+.bet-box {
+    text-align: center;
+}
+
+.bet-label {
+    font-size: 0.75rem;
+    color: rgba(255, 255, 255, 0.6);
+    display: block;
+    margin-bottom: 0.2rem;
+}
+
+.bet-amount {
+    font-size: 1.2rem;
+    font-weight: 800;
+    color: #ffd700;
+}
+
+.small-controls {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 0.8rem;
+    width: 100%;
+}
+
+.btn-sm {
+    padding: 0.8rem 0.5rem;
+    font-size: 0.95rem;
+    border-radius: 8px;
+    white-space: nowrap;
+    border: none;
+    color: white;
+}
+
+.btn-primary {
+    background: linear-gradient(135deg, #3b82f6, #2563eb);
+}
+
+.btn-primary:not(:disabled):hover {
+    background: linear-gradient(135deg, #60a5fa, #3b82f6);
+    transform: translateY(-2px);
+    box-shadow: 0 5px 15px rgba(59, 130, 246, 0.4);
+}
+
+.btn-danger {
+    background: linear-gradient(135deg, #ef4444, #dc2626);
+}
+
+.btn-danger:not(:disabled):hover {
+    background: linear-gradient(135deg, #f87171, #ef4444);
+    transform: translateY(-2px);
+    box-shadow: 0 5px 15px rgba(239, 68, 68, 0.4);
+}
+
+.btn-success {
+    background: linear-gradient(135deg, #10b981, #059669);
+}
+
+.btn-success:not(:disabled):hover {
+    background: linear-gradient(135deg, #34d399, #10b981);
+    transform: translateY(-2px);
+    box-shadow: 0 5px 15px rgba(16, 185, 129, 0.4);
+}
+
+button:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+    background: #4b5563;
+}
+
+@keyframes zoomIn {
+    from {
+        transform: scale(0.95);
+        opacity: 0;
+    }
+
+    to {
+        transform: scale(1);
+        opacity: 1;
+    }
+}
+
+/* Ajustes de las cartas para póker */
+.poker-table .card {
+    position: relative;
+    cursor: default;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+    transform: scale(0.65);
+    /* Escalando las cartas al 65% */
+    transform-origin: top center;
+    margin: 0 -21px -55px -21px;
+    /* Compensando el espacio hueco del escalado (ancho 120->78 = -42/2) y alto (-59px) */
+}
+
+.poker-table .card:not(.dragging):hover {
+    transform: scale(0.65) translateY(-5px);
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.4);
+}

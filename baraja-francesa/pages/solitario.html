@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Solitario - Baraja Francesa</title>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;600;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="../css/styles.css">
+    <link rel="stylesheet" href="../css/dropdown.css">
+    <link rel="stylesheet" href="../css/solitario.css">
+</head>
+
+<body>
+    <!-- Barra de Navegación de Juegos -->
+    <nav class="top-nav">
+        <ul class="nav-links">
+            <li><a href="../index.html" class="nav-brand">🏆 Menú Principal</a></li>
+            <li><a href="baraja.html">Baraja Ordenada</a></li>
+            <li><a href="solitario.html" class="active">Solitario Klondike</a></li>
+            <li><a href="poker.html">Poker Caribeño</a></li>
+        </ul>
+        <div class="user-auth-menu">
+            <span id="user-display" class="user-email" style="display: none;"></span>
+            <button id="btn-login-modal" class="btn btn-sm btn-primary">Iniciar Sesión</button>
+            <button id="btn-logout" class="btn btn-sm btn-danger" style="display: none;">Salir</button>
+        </div>
+    </nav>
+
+    <div class="app-container solitaire-container">
+        <header class="solitaire-header">
+            <div class="score-board">
+                <div class="score-info">
+                    <span class="info-icon">ℹ️</span>
+                    <div class="info-tooltip">
+                        <h4>Sistema de Puntos</h4>
+                        <ul>
+                            <li><strong>+10</strong> Carta a la Base (Fundación)</li>
+                            <li><strong>+5</strong> Revelar carta oculta</li>
+                            <li><strong>-20</strong> Reciclar el mazo</li>
+                        </ul>
+                    </div>
+                </div>
+                <span class="score-label">PUNTUACIÓN</span>
+                <span id="score" class="score-value">0</span>
+            </div>
+            <button id="btn-new-game" class="btn">Nuevo Juego</button>
+        </header>
+
+        <main id="solitaire-table">
+            <!-- Zona Superior: Mazo (Stock), Descarte (Waste) y Fundaciones (Foundations) -->
+            <div class="top-row">
+                <div class="stock-waste">
+                    <div id="stock" class="card-slot stock-slot">
+                        <!-- Mazo principal para robar -->
+                    </div>
+                    <div id="waste" class="card-slot waste-slot">
+                        <!-- Cartas robadas -->
+                    </div>
+                </div>
+
+                <div class="foundations">
+                    <div id="foundation-hearts" class="card-slot foundation-slot pattern-hearts" data-suit="Corazones">
+                    </div>
+                    <div id="foundation-diamonds" class="card-slot foundation-slot pattern-diamonds"
+                        data-suit="Diamantes"></div>
+                    <div id="foundation-clubs" class="card-slot foundation-slot pattern-clubs" data-suit="Tréboles">
+                    </div>
+                    <div id="foundation-spades" class="card-slot foundation-slot pattern-spades" data-suit="Picas">
+                    </div>
+                </div>
+            </div>
+
+            <!-- Zona Inferior: Tableau (Las 7 columnas de juego) -->
+            <div class="tableau">
+                <div id="tableau-0" class="card-slot tableau-slot"></div>
+                <div id="tableau-1" class="card-slot tableau-slot"></div>
+                <div id="tableau-2" class="card-slot tableau-slot"></div>
+                <div id="tableau-3" class="card-slot tableau-slot"></div>
+                <div id="tableau-4" class="card-slot tableau-slot"></div>
+                <div id="tableau-5" class="card-slot tableau-slot"></div>
+                <div id="tableau-6" class="card-slot tableau-slot"></div>
+            </div>
+        </main>
+    </div>
+
+    <!-- Tooltip notifications -->
+    <div id="toast" class="toast"></div>
+
+    <!-- Modal de Autenticación -->
+    <div id="auth-modal" class="modal-overlay" style="display: none;">
+        <div class="modal-content">
+            <button id="btn-close-modal" class="close-btn">&times;</button>
+            <h2 id="auth-title">Iniciar Sesión</h2>
+
+            <form id="auth-form" class="auth-form">
+                <div class="input-group">
+                    <label for="auth-email">Correo Electrónico</label>
+                    <input type="email" id="auth-email" required placeholder="tu@email.com">
+                </div>
+                <div class="input-group">
+                    <label for="auth-password">Contraseña</label>
+                    <input type="password" id="auth-password" required placeholder="••••••••">
+                </div>
+                <div id="auth-error" class="auth-error-msg"></div>
+                <button type="submit" id="btn-submit-auth" class="btn btn-primary w-100">Entrar</button>
+            </form>
+
+            <div class="auth-toggle">
+                <span id="auth-toggle-text">¿No tienes cuenta?</span>
+                <button id="btn-toggle-auth" class="btn-text">Regístrate</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Script de Autenticación, declarado como module -->
+    <script type="module" src="../js/auth.js"></script>
+    <script src="../js/solitario.js"></script>
+</body>
+
+</html>
