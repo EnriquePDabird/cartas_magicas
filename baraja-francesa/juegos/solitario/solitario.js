@@ -3,6 +3,62 @@ document.addEventListener('DOMContentLoaded', () => {
     let score = 0;
     const scoreEl = document.getElementById('score');
 
+    let timerInterval = null;
+    let secondsElapsed = 0;
+    // Referencia obtenida después para evitar nulos tempranos
+    let timerEl = null;
+
+    let currentUser = null;
+    let highestScore = 0;
+    let bestTime = Infinity;
+
+    // --- FIREBASE AUTH Y SYNC ---
+    auth.onAuthStateChanged(user => {
+        if (user) {
+            currentUser = user;
+            StatsService.getUserData(user).then(userData => {
+                if (userData.stats && userData.stats.solitaire) {
+                    highestScore = userData.stats.solitaire.highestScore || 0;
+                    bestTime = userData.stats.solitaire.bestTime || Infinity;
+                }
+            }).catch(console.error);
+        } else {
+            currentUser = null;
+            highestScore = 0;
+            bestTime = Infinity;
+        }
+    });
+
+    function updateFirestore(updates) {
+        if (currentUser) {
+            StatsService.update(currentUser.uid, updates);
+        }
+    }
+
+    // Cronómetro
+    function formatTime(totalSeconds) {
+        const m = Math.floor(totalSeconds / 60);
+        const s = totalSeconds % 60;
+        return `${m.toString().padStart(2, '0')}:${s.toString().padStart(2, '0')}`;
+    }
+
+    function startTimer() {
+        if (!timerEl) timerEl = document.getElementById('timer');
+        if (!timerEl) return;
+
+        clearInterval(timerInterval);
+        secondsElapsed = 0;
+        timerEl.innerText = "00:00";
+        timerInterval = setInterval(() => {
+            secondsElapsed++;
+            if (timerEl) timerEl.innerText = formatTime(secondsElapsed);
+        }, 1000);
+    }
+
+    function stopTimer() {
+        clearInterval(timerInterval);
+    }
+
     // Generación de Baraja Base
     const suits = [
         { name: 'Corazones', symbol: '♥', color: 'red' },
@@ -43,6 +99,13 @@ document.addEventListener('DOMContentLoaded', () => {
         score += points;
         if (score < 0) score = 0;
         scoreEl.innerText = score;
+
+        if (score > highestScore && currentUser) {
+            highestScore = score;
+            updateFirestore({
+                'stats.solitaire.highestScore': highestScore
+            });
+        }
     }
 
     function showToast(message) {
@@ -50,6 +113,25 @@ document.addEventListener('DOMContentLoaded', () => {
         toast.innerText = message;
         toast.classList.add('show');
         setTimeout(() => toast.classList.remove('show'), 3000);
+    }
+
+    function checkWinCondition() {
+        const totalInFoundations = Object.values(gameState.foundations).reduce((acc, curr) => acc + curr.length, 0);
+        if (totalInFoundations === 52) {
+            stopTimer();
+            showToast('¡Has Ganado!');
+            if (currentUser) {
+                const updates = {
+                    'stats.solitaire.gamesWon': firebase.firestore.FieldValue.increment(1)
+                };
+                if (secondsElapsed < bestTime) {
+                    bestTime = secondsElapsed;
+                    updates['stats.solitaire.bestTime'] = bestTime;
+                    showToast('¡Nuevo récord de tiempo!');
+                }
+                updateFirestore(updates);
+            }
+        }
     }
 
     // === GENERADOR DE CARTAS (Reutilizado visualmente) ===
@@ -320,6 +402,12 @@ document.addEventListener('DOMContentLoaded', () => {
                     updateScore(5);
                 }
             }
+
+            // Si hemos puesto carta en fundación, verificamos si ganamos el juego.
+            if (targetIsFoundation) {
+                checkWinCondition();
+            }
+
             return true;
         }
 
@@ -439,7 +527,14 @@ document.addEventListener('DOMContentLoaded', () => {
             gameState.stock.push(c);
         });
 
+        if (currentUser) {
+            updateFirestore({
+                'stats.solitaire.gamesPlayed': firebase.firestore.FieldValue.increment(1)
+            });
+        }
+
         renderDOMfromState();
+        startTimer();
     }
 
     // Binding botón Nuevo Juego

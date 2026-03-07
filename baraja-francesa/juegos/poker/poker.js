@@ -13,22 +13,8 @@ document.addEventListener('DOMContentLoaded', () => {
     auth.onAuthStateChanged(user => {
         if (user) {
             currentUser = user;
-            db.collection('users').doc(user.uid).get().then(doc => {
-                if (doc.exists) {
-                    chips = doc.data().chips;
-                } else {
-                    const newDoc = {
-                        email: user.email,
-                        chips: 1000,
-                        createdAt: firebase.firestore.FieldValue.serverTimestamp(),
-                        lastLogin: firebase.firestore.FieldValue.serverTimestamp(),
-                        stats: {
-                            poker: { handsPlayed: 0, handsWon: 0, highestWin: 0 }
-                        }
-                    };
-                    db.collection('users').doc(user.uid).set(newDoc);
-                    chips = 1000;
-                }
+            StatsService.getUserData(user).then(userData => {
+                chips = userData.chips || 1000;
                 renderUI();
             }).catch(console.error);
         } else {
@@ -40,7 +26,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     function updateFirestore(updates) {
         if (currentUser) {
-            db.collection('users').doc(currentUser.uid).set(updates, { merge: true }).catch(console.error);
+            StatsService.update(currentUser.uid, updates);
         }
     }
 
