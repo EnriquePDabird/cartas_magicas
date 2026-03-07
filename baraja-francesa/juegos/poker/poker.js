@@ -7,6 +7,42 @@ document.addEventListener('DOMContentLoaded', () => {
     let playerHand = [];
     let dealerHand = [];
     let gameState = 'IDLE'; // IDLE, ANTE, DEALT, RESOLVED
+    let currentUser = null;
+
+    // --- FIREBASE AUTH Y SYNC ---
+    auth.onAuthStateChanged(user => {
+        if (user) {
+            currentUser = user;
+            db.collection('users').doc(user.uid).get().then(doc => {
+                if (doc.exists) {
+                    chips = doc.data().chips;
+                } else {
+                    const newDoc = {
+                        email: user.email,
+                        chips: 1000,
+                        createdAt: firebase.firestore.FieldValue.serverTimestamp(),
+                        lastLogin: firebase.firestore.FieldValue.serverTimestamp(),
+                        stats: {
+                            poker: { handsPlayed: 0, handsWon: 0, highestWin: 0 }
+                        }
+                    };
+                    db.collection('users').doc(user.uid).set(newDoc);
+                    chips = 1000;
+                }
+                renderUI();
+            }).catch(console.error);
+        } else {
+            currentUser = null;
+            chips = 1000;
+            renderUI();
+        }
+    });
+
+    function updateFirestore(updates) {
+        if (currentUser) {
+            db.collection('users').doc(currentUser.uid).set(updates, { merge: true }).catch(console.error);
+        }
+    }
 
     const BASE_ANTE = 10;
 
@@ -258,6 +294,7 @@ document.addEventListener('DOMContentLoaded', () => {
             anteBet += BASE_ANTE;
             gameState = 'ANTE';
             renderUI();
+            updateFirestore({ chips: chips });
         }
     });
 
@@ -279,6 +316,9 @@ document.addEventListener('DOMContentLoaded', () => {
         renderHands(true);
         renderUI();
         showMessage('Te Retiraste', `Pierdes el Ante (${anteBet} fichas).`);
+        updateFirestore({
+            'stats.poker.handsPlayed': firebase.firestore.FieldValue.increment(1)
+        });
     });
 
     DOM.btnCall.addEventListener('click', () => {
@@ -286,6 +326,7 @@ document.addEventListener('DOMContentLoaded', () => {
         if (chips >= callNeeded) {
             chips -= callNeeded;
             callBet = callNeeded;
+            updateFirestore({ chips: chips });
             resolveGame();
         }
     });
@@ -293,6 +334,11 @@ document.addEventListener('DOMContentLoaded', () => {
     DOM.btnReset.addEventListener('click', () => {
         chips = 1000;
         renderUI();
+        if (!currentUser) {
+            showMessage('Aviso', 'Inicia sesión para que tus fichas se guarden.');
+        } else {
+            updateFirestore({ chips: chips });
+        }
     });
 
     DOM.btnNext.addEventListener('click', () => {
@@ -315,9 +361,12 @@ document.addEventListener('DOMContentLoaded', () => {
         const pEval = evaluateHand(playerHand);
         const dEval = evaluateHand(dealerHand);
 
+        let isWin = false;
+
         if (!dealerQualifies(dEval)) {
             // Banca no cualifica: Ante paga 1:1, Call empuja
             chips += (anteBet * 2) + callBet;
+            isWin = true;
             showMessage('Banca no cualifica', `Ganas el Ante (+${anteBet}). El Call se devuelve.`);
         } else {
             // Comparar manos
@@ -336,6 +385,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 const wonAnte = anteBet * 2;
                 const wonCall = callBet + (callBet * multiplier);
                 chips += wonAnte + wonCall;
+                isWin = true;
                 showMessage('¡Ganaste!', `Mejor mano. Ganas +${anteBet} (Ante) y +${callBet * multiplier} (Call x${multiplier}).`);
             } else if (winner === 'dealer') {
                 showMessage('Perdiste', `La Banca tiene mejor mano.`);
@@ -344,8 +394,21 @@ document.addEventListener('DOMContentLoaded', () => {
                 showMessage('Empate', 'Recuperas tus apuestas.');
             }
         }
+
+        if (currentUser) {
+            const updates = {
+                chips: chips,
+                'stats.poker.handsPlayed': firebase.firestore.FieldValue.increment(1)
+            };
+            if (isWin) {
+                updates['stats.poker.handsWon'] = firebase.firestore.FieldValue.increment(1);
+            }
+            updateFirestore(updates);
+        }
+
         renderUI();
     }
 
-    renderUI();
+    // Inicializamos UI después de comprobar logueo
+    // renderUI() se llamará cuando onAuthStateChanged resuelva
 });

@@ -1,10 +1,4 @@
-import { auth } from './firebase-config.js';
-import {
-    createUserWithEmailAndPassword,
-    signInWithEmailAndPassword,
-    onAuthStateChanged,
-    signOut
-} from "https://www.gstatic.com/firebasejs/10.9.0/firebase-auth.js";
+// Auth system logic
 
 document.addEventListener('DOMContentLoaded', () => {
     // Referencias DOM - Elementos del Nav
@@ -82,7 +76,7 @@ document.addEventListener('DOMContentLoaded', () => {
     // --- LÓGICA DE FIREBASE AUTH ---
 
     // Observador de Estado: se dispara automáticamente si el usuario hace login/logout
-    onAuthStateChanged(auth, (user) => {
+    auth.onAuthStateChanged((user) => {
         if (user) {
             // Usuario está logueado
             if (userDisplay) {
@@ -116,7 +110,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
         if (isLoginMode) {
             // INICIO DE SESIÓN
-            signInWithEmailAndPassword(auth, email, password)
+            auth.signInWithEmailAndPassword(email, password)
                 .then((userCredential) => {
                     // El login fue exitoso (onAuthStateChanged atrapará esto)
                     btnSubmitAuth.disabled = false;
@@ -128,7 +122,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 });
         } else {
             // REGISTRO
-            createUserWithEmailAndPassword(auth, email, password)
+            auth.createUserWithEmailAndPassword(email, password)
                 .then((userCredential) => {
                     // Registro exitoso
                     btnSubmitAuth.disabled = false;
@@ -143,7 +137,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Cierre de Sesión
     btnLogout?.addEventListener('click', () => {
-        signOut(auth).catch((error) => {
+        auth.signOut().catch((error) => {
             console.error("Error signing out: ", error);
         });
     });
