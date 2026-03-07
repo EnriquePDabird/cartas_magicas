@@ -5,7 +5,11 @@ class GlobalAudioPlayer {
         const depth = window.location.pathname.split('/').filter(p => p.length > 0).length - 1;
         // In this project, index is at root, games are 2 levels deep (juegos/poker/poker.html)
         const isGame = window.location.pathname.includes('/juegos/');
-        this.audioSrc = isGame ? '../../core/assets/audio/background.webm' : 'core/assets/audio/background.webm';
+        const isLeaderboard = window.location.pathname.includes('leaderboard');
+
+        const trackName = isLeaderboard ? 'leaderboard.webm' : 'background.webm';
+        this.audioSrc = isGame ? `../../core/assets/audio/${trackName}` : `core/assets/audio/${trackName}`;
+        this.timeStorageKey = isLeaderboard ? 'leaderboardMusicTime' : 'bgMusicTime';
 
         this.audio.src = this.audioSrc;
         this.audio.loop = true;
@@ -13,7 +17,7 @@ class GlobalAudioPlayer {
 
         const savedPlaying = localStorage.getItem('bgMusicPlaying');
         this.isPlaying = savedPlaying === null ? true : savedPlaying === 'true';
-        this.savedTime = parseFloat(localStorage.getItem('bgMusicTime')) || 0;
+        this.savedTime = parseFloat(localStorage.getItem(this.timeStorageKey)) || 0;
         this.savedVolume = parseFloat(localStorage.getItem('bgMusicVolume')) || 0.3;
         this.audio.volume = this.savedVolume;
 
@@ -91,13 +95,13 @@ class GlobalAudioPlayer {
         // Save progress periodically so it resumes on next page
         setInterval(() => {
             if (this.isPlaying) {
-                localStorage.setItem('bgMusicTime', this.audio.currentTime);
+                localStorage.setItem(this.timeStorageKey, this.audio.currentTime);
             }
         }, 1000);
 
         // Save state before unloading
         window.addEventListener('beforeunload', () => {
-            localStorage.setItem('bgMusicTime', this.audio.currentTime);
+            localStorage.setItem(this.timeStorageKey, this.audio.currentTime);
         });
     }
 
